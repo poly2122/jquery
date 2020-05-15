@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .magnifier {
+            box-sizing: border-box;
+            margin: 20px auto;
+            width: 500px;
+        }
+
+        .magnifier .abbre,
+        .magnifier .origin {
+            float: left;
+        }
+
+        .magnifier .abbre {
+
+            position: relative;
+            box-sizing: border-box;
+            width: 200px;
+            height: 200px;
+        }
+
+        .magnifier .abbre img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .magnifier .abbre .mark {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 0, 0, .3);
+            cursor: move;
+        }
+
+        .magnifier .origin {
+
+            display: none;
+            position: relative;
+            box-sizing: border-box;
+            width: 300px;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .magnifier .origin img {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="magnifier clearfix">
+        <div class="abbre">
+            <img src="images/1.jpg" style="display: none;top: 140px;left: 35.5px;">
+            <div class="mark"></div>
+        </div>
+
+        <!-- 右侧原图（大图 -->
+        <div class="origin">
+            <img src="images/2.jpg" style="width: 1000px;height: 1000px; top: -700px; left: -182.5px;">
+        </div>
+    </section>
+    <!-- 左侧缩略图 -->
+
+    <!-- js -->
+    <script src="js/jquery.min.js"></script>
+    <script>
+        // 首先计算大图的小
+        let $abbre = $('.abbre'),
+            $mark = $abbre.find('.mark'),
+            $origin = $('.origin'),
+            $origginImg = $origin.find('img');
+        let abbreW=$abbre.outerWidth(),
+            abbreH=$abbre.outerHeight(),
+            //获取当前元素距离body的偏移 =》{top:xxx,left:xxx}
+            abbreOffset=$abbre.offset(), 
+            markW=$mark.outerWidth(),
+            markH=$mark.outerHeight(),
+            originW=$mark.outerWidth(),
+            originH=$mark.outerHeight(),
+            origginImgW=abbreW/abbreW*origginImgW,
+            origginImgH=abbreH/markH*markH;
+        $origginImg.css({
+            width:origginImgW,
+            height:origginImgH,
+        });
+
+        // 鼠标进入和离开完成的事情
+        // 计算mark盒子在abbre的位置 和控制大图的移动
+        function computedMark(ev){
+            let markL=ev.clientX-abbreOffset.left-markW/2,
+            markT=ev.clientY-abbreOffset.top-markH/2;
+        }
+
+        $abbre.on('mouseenter',function(ev){
+            $mark.css('dispaly','block');
+            $origin.css('dispaly','block');
+        }).on('mouseleave',function(ev){
+            $mark.css('dispaly','none');
+            $origin.css('dispaly','none');
+        }).on('mousemove',computedMark);
+    </script>
+
+</body>
+
+</html>

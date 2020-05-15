@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            -webkit-user-select: none;
+        }
+
+        .container {
+            box-sizing: border-box;
+            margin: 20px auto;
+            padding: 10px;
+            width: 600px;
+            border: 1px dashed #AAA;
+        }
+
+        .level {
+            display: none;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        .level.level0 {
+            display: block;
+            margin-left: 0;
+        }
+
+        .level li {
+            position: relative;
+            padding-left: 15px;
+            line-height: 30px;
+        }
+
+        .level li .icon {
+            position: absolute;
+            left: 0;
+            top: 9px;
+            box-sizing: border-box;
+            width: 12px;
+            height: 12px;
+            line-height: 8px;
+            text-align: center;
+            border: 1px solid #AAA;
+            background: #EEE;
+            cursor: pointer;
+        }
+
+        .level li .icon:after {
+            display: block;
+            content: "+";
+            font-size: 12px;
+            font-style: normal;
+        }
+
+        .level li .icon.open:after {
+            content: "-";
+        }
+
+        .level li .title {
+            color: #000;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <ul class="level level0" id="tree1">
+            <li>
+                <a href="" class="title">前端开发基础</a>
+                <em class="icon open"></em>
+                <ul class="level level1" style="display: block;">
+                </ul>
+            </li>
+            <a href="" class="title">html5核心知识</a>
+            <em class="icon open"></em>
+            <ul class="level level2" style="display: block;"></ul>
+            </li>
+            <li>
+                <a href="" class="title">新增语义化标签</a>
+            </li>
+            <li>
+                <a href="" class="title">表单元素新特性</a>
+            </li>
+            <li>
+                <a href="" class="title">音视屏处理</a>
+            </li>
+        </li>
+        <a href="" class="title">css3核心知识</a>
+        <em class="icon open"></em>
+        <ul class="level level2" style="display: block;"></ul>
+        </li>
+        <li>
+            <a href="" class="title">新增选择器</a>
+        </li>
+        <li>
+            <a href="" class="title">css动画</a>
+            <em class="icon open"></em>
+        <ul class="level level2" style="display: block;"></ul>
+        </li>
+        <li>
+            <a href="" class="title">transition</a>
+        </li>
+        </ul>
+        </li>
+        </ul>
+    </div>
+</body>
+  <script src="js/jquery.min.js"></script>
+  <script>
+//    1.动态绑定层级结构数据
+  let $tree1=$('#tree1');
+  count=0;
+  let bind= function bind(result){
+    count++;
+    //   解构赋值
+      
+    let str=``;
+    // 循环数组的每一项
+    result.forEach(item => {
+        str+=`<li>
+            <a href="#" class="title">${item.name}</a>
+            ${item.children?`
+                <em class="icon ${item.open?'open':''}"></em>
+                <ul class="level level1${count}" style="display: ${item.open?'block':'none'};"> 
+                    ${bind(item.children)}
+                    </ul> `
+                :``}
+          </li>`
+    });
+   return str;
+  }
+  $.ajax({
+      url:'./data.json',
+      method:'get',
+      success:result=>{
+        // 接受字符串
+        let str=  bind(result);
+        $tree1.html(str);
+      }
+  })
+
+    // 2.实现无极限展开（事件委托：可以处理动态绑定的元素
+      $tree1.on('click',function(ev){
+          let target=ev.target;
+          if(target.tagName==='EM'){
+              let $target=$(target)
+          }
+      })
+  </script>
+</html>
